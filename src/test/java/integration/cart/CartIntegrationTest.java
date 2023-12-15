@@ -136,6 +136,26 @@ class CartIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    @DisplayName("로그인 하지 않은 유저는 장바구니를 조회할 수 없다.")
+    void canNotReadCartItemNotLoginUser() {
+        // given
+        Long productId = ProductHelper.createProductAndSetUp(10);
+        Long otherProductId = ProductHelper.createProductAndSetUp(50);
+
+        String accessToken = MemberHelper.signUpAndLogIn();
+
+        CartItemHelper.addCartItem(productId, 5, accessToken);
+
+        CartItemHelper.addCartItem(otherProductId, 10, accessToken);
+
+        // when
+        ExtractableResponse<Response> response = CommonRestAssuredUtils.get("/cart-items", (String)null);
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
     @DisplayName("사용자는 장바구니 상품의 수량을 조절할 수 있다.")
     void updateQuantity() {
         // given

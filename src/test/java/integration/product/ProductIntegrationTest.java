@@ -42,6 +42,20 @@ class ProductIntegrationTest extends IntegrationTest {
 	}
 
 	@Test
+	@DisplayName("일반유저는 상품 이름, 가격, 이미지 주소를 입력해 Product를 생성할 수 없다.")
+	void canNotCreateUser() {
+		// given
+		String accessToken = MemberHelper.signUpAndLogIn();
+		ProductCreateRequest request = ProductHelper.createProductCreateRequest();
+
+		// when
+		ExtractableResponse<Response> response = CommonRestAssuredUtils.post("/products", request, accessToken);
+
+		//then
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+	}
+
+	@Test
 	@DisplayName("상품 Id로 상품 상세 정보를 조회할 수 있다.")
 	void findById() {
 		// given

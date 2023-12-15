@@ -10,9 +10,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.woowa.woowakit.global.argument.AuthPrincipalResolver;
-import com.woowa.woowakit.global.interceptor.AdminAuthorityInterceptor;
 import com.woowa.woowakit.global.interceptor.AuthenticationInterceptor;
-import com.woowa.woowakit.global.interceptor.UserAuthorityInterceptor;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class WebConfig implements WebMvcConfigurer {
 
 	private final AuthenticationInterceptor authenticationInterceptor;
-	private final AdminAuthorityInterceptor adminAuthorityInterceptor;
-	private final UserAuthorityInterceptor userAuthorityInterceptor;
 	private final AuthPrincipalResolver authPrincipalResolver;
 
 	@Value("${cors.allowed-origin}")
@@ -34,16 +30,6 @@ public class WebConfig implements WebMvcConfigurer {
 			.addInterceptor(authenticationInterceptor)
 			.addPathPatterns("/**")
 			.order(0);
-
-		registry
-			.addInterceptor(userAuthorityInterceptor)
-			.addPathPatterns("/**")
-			.order(1);
-
-		registry
-			.addInterceptor(adminAuthorityInterceptor)
-			.addPathPatterns("/**")
-			.order(2);
 	}
 
 	@Override
